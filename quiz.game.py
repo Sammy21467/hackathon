@@ -1,23 +1,21 @@
-# imports
-from turtle import *
+import os
+import turtle
 
 # setup the game window
-screen = Screen()
+screen = turtle.Screen()
 screen.setup(600, 400)
 screen.bgcolor("white")
 screen.title("python learning game")
 # we use screen.update() to show each screen when it is ready
 screen.tracer(0)
 
-# show the welcome picture the game still works if the picture is missing
-has_picture = True
-try:
+# show the welcome picture if the file is in this folder
+has_picture = os.path.exists("welcome.gif")
+if has_picture:
     screen.bgpic("welcome.gif")
-except:
-    has_picture = False
 
 # this turtle is only used to write text and draw buttons
-writer = Turtle()
+writer = turtle.Turtle()
 writer.hideturtle()
 writer.penup()
 
@@ -28,16 +26,24 @@ tasks = [
     "what type of brackets do you use for dictionaries?",
     "when should you use a for loop?",
     "what keyword do you use to create a function?",
+    "what is the purpose of the 'if' statement?",
+    "How do you create a variable called 'score'\nand give it a value of 100?",
+    "Which data type stores someone's age\nas a whole number?",
+    "In C#, what command displays text\non the screen?",
+    "In C#, which keyword creates a new class?",
 ]
 
-# multiple choice options for questions 3, 4, and 5 (tasks index 2, 3, and 4)
-# each choice has the text and whether it is correct (true/false)
+# Each choice is (answer text, whether it is correct).
 choices = {
-    2: [("{ }", True), ("[ ]", False), ("( )", False)],
-    3: [("when you know how many times to repeat", True), ("only for math", False), ("never", False)],
-    4: [("def", True), ("func", False), ("function", False)],
+    2: [("[ ]", False), ("{ }", True), ("( )", False)],
+    3: [("only for math", False), ("when you know how many\ntimes to repeat", True), ("never", False)],
+    4: [("function", False), ("def", True), ("func", False)],
+    5: [("to create a loop", False), ("to define a variable", False), ("to make decisions\nin your code", True)],
+    6: [("score == 100", False), ("score = 100", True), ("score = '100'", False), ("score: 100", False)],
+    7: [("float", False), ("int", True), ("string", False), ("boolean", False)],
+    8: [("Console.ReadLine", False), ("Console.WriteLine", True), ("print", False)],
+    9: [("function", False), ("class", True), ("method", False), ("object", False)],
 }
-
 # these keep track of where the player is
 current_task = 0     # 0 means the first task
 state = "welcome"    # welcome, question, correct, or done
@@ -49,22 +55,22 @@ def write_text(x, y, text, color, size):
     writer.write(text, align="center", font=("arial", size, "bold"))
 
 # draw a button: a box with text inside
-def draw_button(x, y, text):
+def draw_button(x, y, text, font_size=14):
     writer.color("black")
-    writer.goto(x - 60, y - 10)
+    writer.goto(x - 80, y - 10)
     writer.setheading(0)
     writer.pendown()
     for i in range(2):
-        writer.forward(120)
+        writer.forward(160)
         writer.left(90)
         writer.forward(35)
         writer.left(90)
     writer.penup()
-    write_text(x, y, text, "black", 14)
+    write_text(x, y, text, "black", font_size)
 
 # check if a click landed on a button
 def button_hit(click_x, click_y, button_x, button_y):
-    return button_x - 60 <= click_x <= button_x + 60 and button_y - 10 <= click_y <= button_y + 25
+    return button_x - 80 <= click_x <= button_x + 80 and button_y - 10 <= click_y <= button_y + 25
 
 # the welcome screen
 def show_welcome():
@@ -89,10 +95,18 @@ def show_question(message="", color="black"):
     if current_task in choices:
         write_text(0, 55, "click the correct answer below.", "gray", 12)
         opt_y = 10
-        for text, is_correct in choices[current_task]:
-            draw_button(0, opt_y, text)
+        options = choices[current_task]
+        for text, is_correct in options:
+            if "\n" in text:
+                font_size = 9
+            elif len(text) > 12:
+                font_size = 10
+            else:
+                font_size = 14
+            draw_button(0, opt_y, text, font_size)
             opt_y -= 45
-        write_text(0, -135, message, color, 14)
+        message_y = -170 if len(options) > 3 else -135
+        write_text(0, message_y, message, color, 14)
     else:
         write_text(0, 55, "click answer, then type your code.", "gray", 12)
         draw_button(0, -30, "answer")
@@ -174,10 +188,7 @@ def next_task():
 def start_game():
     global current_task
     current_task = 0
-    try:
-        screen.bgpic("nopic")     # removes the welcome picture
-    except:
-        pass
+    screen.bgpic("nopic")     # removes the welcome picture
     screen.bgcolor("white")
     show_question()
 
@@ -216,4 +227,4 @@ def click_action(x, y):
 
 screen.onclick(click_action)
 show_welcome()
-done()
+turtle.done()
