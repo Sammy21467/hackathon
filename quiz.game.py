@@ -1,25 +1,23 @@
 import os
-import turtle
+from turtle import *
 
 # setup the game window
-screen = turtle.Screen()
-screen.setup(600, 400)
-screen.bgcolor("white")
-screen.title("python learning game")
-# we use screen.update() to show each screen when it is ready
-screen.tracer(0)
+setup(600, 400)
+bgcolor("white")
+title("python learning game")
+# we use update() to show each screen when it is ready
+tracer(0)
 
 # show the welcome picture if the file is in this folder
 has_picture = os.path.exists("welcome.gif")
 if has_picture:
-    screen.bgpic("welcome.gif")
+    bgpic("welcome.gif")
 
-# this turtle is only used to write text and draw buttons
-writer = turtle.Turtle()
+# write text and draw buttons
+writer = Turtle()
 writer.hideturtle()
 writer.penup()
 
-# add more tasks here
 tasks = [
     "print out your name.",
     "how do you import the turtle module?",
@@ -33,7 +31,6 @@ tasks = [
     "In C#, which keyword creates a new class?",
 ]
 
-# Each choice is (answer text, whether it is correct).
 choices = {
     2: [("[ ]", False), ("{ }", True), ("( )", False)],
     3: [("only for math", False), ("when you know how many\ntimes to repeat", True), ("never", False)],
@@ -44,9 +41,10 @@ choices = {
     8: [("Console.ReadLine", False), ("Console.WriteLine", True), ("print", False)],
     9: [("function", False), ("class", True), ("method", False), ("object", False)],
 }
+
 # these keep track of where the player is
-current_task = 0     # 0 means the first task
-state = "welcome"    # welcome, question, correct, or done
+current_task = 0
+state = "welcome"
 
 # write text on the screen
 def write_text(x, y, text, color, size):
@@ -54,7 +52,7 @@ def write_text(x, y, text, color, size):
     writer.color(color)
     writer.write(text, align="center", font=("arial", size, "bold"))
 
-# draw a button: a box with text inside
+# draw a button a box with text inside
 def draw_button(x, y, text, font_size=14):
     writer.color("black")
     writer.goto(x - 80, y - 10)
@@ -74,14 +72,14 @@ def button_hit(click_x, click_y, button_x, button_y):
 
 # the welcome screen
 def show_welcome():
-    global state          # "global" lets this function change the variable
+    global state
     state = "welcome"
     writer.clear()
     if not has_picture:
         write_text(0, 90, "python learning game", "black", 24)
     draw_button(0, -40, "continue")
     draw_button(0, -100, "end")
-    screen.update()       # show everything we just drew
+    update()
 
 # a task screen (message is the feedback, like "not quite!")
 def show_question(message="", color="black"):
@@ -90,7 +88,7 @@ def show_question(message="", color="black"):
     writer.clear()
     write_text(0, 130, "task " + str(current_task + 1) + " of " + str(len(tasks)), "blue", 14)
     write_text(0, 90, tasks[current_task], "black", 14)
-    
+
     # check if this is a multiple choice task or a typing task
     if current_task in choices:
         write_text(0, 55, "click the correct answer below.", "gray", 12)
@@ -111,8 +109,8 @@ def show_question(message="", color="black"):
         write_text(0, 55, "click answer, then type your code.", "gray", 12)
         draw_button(0, -30, "answer")
         write_text(0, -90, message, color, 16)
-        
-    screen.update()
+
+    update()
 
 # shown when the answer is right
 def show_correct():
@@ -124,7 +122,7 @@ def show_correct():
         draw_button(0, -30, "finish")
     else:
         draw_button(0, -30, "continue")
-    screen.update()
+    update()
 
 # shown after the last task
 def show_done():
@@ -134,7 +132,7 @@ def show_done():
     write_text(0, 60, "you finished all the tasks!", "green", 20)
     write_text(0, 20, "great job learning python!", "black", 14)
     draw_button(0, -60, "end")
-    screen.update()
+    update()
 
 # task 1 check: print("name") with at least one letter inside the quotes
 def check_print_name(answer):
@@ -167,8 +165,8 @@ def check_answer(answer):
 
 # open the box where the player types their answer
 def ask_question():
-    answer = screen.textinput("task " + str(current_task + 1), "type your code here:")
-    if answer is None:        # they pressed cancel
+    answer = textinput("task " + str(current_task + 1), "type your code here:")
+    if answer is None:
         return
     if check_answer(answer):
         show_correct()
@@ -188,13 +186,13 @@ def next_task():
 def start_game():
     global current_task
     current_task = 0
-    screen.bgpic("nopic")     # removes the welcome picture
-    screen.bgcolor("white")
+    bgpic("nopic")
+    bgcolor("white")
     show_question()
 
 # close the window
 def end_game():
-    screen.bye()
+    bye()
 
 # runs every time the player clicks
 def click_action(x, y):
@@ -225,6 +223,6 @@ def click_action(x, y):
         if button_hit(x, y, 0, -60):
             end_game()
 
-screen.onclick(click_action)
+onscreenclick(click_action)
 show_welcome()
-turtle.done()
+done()
