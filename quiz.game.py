@@ -1,3 +1,4 @@
+# imports
 import os
 from turtle import *
 
@@ -32,13 +33,13 @@ tasks = [
 ]
 
 choices = {
-    2: [("[ ]", False), ("{ }", True), ("( )", False)],
-    3: [("only for math", False), ("when you know how many\ntimes to repeat", True), ("never", False)],
-    4: [("function", False), ("def", True), ("func", False)],
+    2: [("{ }", True), ("[ ]", False), ("( )", False)],
+    3: [("when you know how many\ntimes to repeat", True), ("only for math", False), ("never", False)],
+    4: [("function", False), ("func", False), ("def", True)],
     5: [("to create a loop", False), ("to define a variable", False), ("to make decisions\nin your code", True)],
     6: [("score == 100", False), ("score = 100", True), ("score = '100'", False), ("score: 100", False)],
-    7: [("float", False), ("int", True), ("string", False), ("boolean", False)],
-    8: [("Console.ReadLine", False), ("Console.WriteLine", True), ("print", False)],
+    7: [("int", True),("float", False),  ("string", False), ("boolean", False)],
+    8: [ ("Console.WriteLine", True),("Console.ReadLine", False), ("print", False)],
     9: [("function", False), ("class", True), ("method", False), ("object", False)],
 }
 
@@ -226,3 +227,4 @@ def click_action(x, y):
 onscreenclick(click_action)
 show_welcome()
 done()
+
